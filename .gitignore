@@ -1,11 +1,16 @@
 # ========================== 编译产物==========================
 # 编译输出目录（全部忽略，产物集中在这里）
 /output/
-# 源文件目录下可能生成的目标文件、依赖文件
+/build/
+# 源文件目录下可能生成的目标文件、依赖文件、可执行文件
 /src/*.o
 /src/*.obj
 /src/*.d
 /src/*.pdb
+/src/*.exe
+/src/*.exe.stackdump
+/src/*.out
+/src/a.out
 # 根目录可能生成的可执行文件（Windows/Linux/macOS）
 *.exe
 *.exe.stackdump
