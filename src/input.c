@@ -52,7 +52,7 @@ void inputStudentInfo(StudentDB *db)
     }
 
     Student newStu = {0};
-    flushInput(); 
+    flushInput();
 
     // 输入姓名
     printf("请输入学生姓名: ");
@@ -205,7 +205,7 @@ void deleteStudent(StudentDB *db)
     {
         db->stu[i] = db->stu[i + 1];
     }
-    
+
     // 4. 更新计数并清空末尾多余数据
     db->count--;
     // 将原数组最后一个位置清零，防止残留数据
@@ -224,16 +224,16 @@ void saveData(const StudentDB *db)
         printf("警告：无法保存数据文件！\n");
         return;
     }
-    
+
     // 1. 先写入学生数量
     fwrite(&db->count, sizeof(int), 1, fp);
-    
+
     // 2. 写入有效的学生数组部分 (只写有数据的部分，节省空间)
     if (db->count > 0)
     {
         fwrite(db->stu, sizeof(Student), db->count, fp);
     }
-    
+
     fclose(fp);
     printf(">> 数据已成功保存到 student_data.dat\n");
 }
@@ -246,7 +246,7 @@ void loadData(StudentDB *db)
         // 文件不存在是正常的（第一次运行），直接返回
         return;
     }
-    
+
     // 1. 读取学生数量
     if (fread(&db->count, sizeof(int), 1, fp) != 1)
     {
@@ -254,16 +254,17 @@ void loadData(StudentDB *db)
         fclose(fp);
         return;
     }
-    
+
     // 2. 读取学生数据
     if (db->count > 0)
     {
         // 注意：这里最好加一个检查，防止文件中的 count 超过数组最大容量 STUDENT_COUNT
-        if (db->count > STUDENT_COUNT) db->count = STUDENT_COUNT; 
-        
+        if (db->count > STUDENT_COUNT)
+            db->count = STUDENT_COUNT;
+
         fread(db->stu, sizeof(Student), db->count, fp);
     }
-    
+
     fclose(fp);
     printf(">> 已加载 %d 条历史数据。\n", db->count);
 }

@@ -5,52 +5,66 @@
 char evaluateGrade(float avg)
 {
     // 等级评定规则：A(90-100)、B(80-89)、C(70-79)、D(60-69)、F(0-59)，异常分数返回'?'
-    if (avg >= 90.0f && avg <= 100.0f) {
+    if (avg >= 90.0f && avg <= 100.0f)
+    {
         return 'A';
-    } else if (avg >= 80.0f && avg < 90.0f) {
+    }
+    else if (avg >= 80.0f && avg < 90.0f)
+    {
         return 'B';
-    } else if (avg >= 70.0f && avg < 80.0f) {
+    }
+    else if (avg >= 70.0f && avg < 80.0f)
+    {
         return 'C';
-    } else if (avg >= 60.0f && avg < 70.0f) {
+    }
+    else if (avg >= 60.0f && avg < 70.0f)
+    {
         return 'D';
-    } else if (avg >= 0.0f && avg < 60.0f) {
+    }
+    else if (avg >= 0.0f && avg < 60.0f)
+    {
         return 'F';
-    } else {
+    }
+    else
+    {
         return '?'; // 处理超出0-100的异常分数
     }
 }
 
 void generateComment(Student *stu)
 {
-    if (stu == NULL) return; // 避免空指针访问
+    if (stu == NULL)
+        return; // 避免空指针访问
 
     // 根据等级生成个性化评语，确保不超出comment数组长度
-    switch (stu->grade) {
-        case 'A':
-            strncpy(stu->comment, "优秀！学习能力突出，知识掌握扎实，继续保持领先优势！", sizeof(stu->comment)-1);
-            break;
-        case 'B':
-            strncpy(stu->comment, "良好！基础稳固，具备较强的应用能力，针对性提升可冲刺优秀！", sizeof(stu->comment)-1);
-            break;
-        case 'C':
-            strncpy(stu->comment, "中等！掌握核心知识点，但存在薄弱环节，需加强练习巩固基础！", sizeof(stu->comment)-1);
-            break;
-        case 'D':
-            strncpy(stu->comment, "及格！基本达到课程要求，需重点攻克薄弱科目，提升综合实力！", sizeof(stu->comment)-1);
-            break;
-        case 'F':
-            strncpy(stu->comment, "不及格！知识掌握存在较大缺口，建议查漏补缺，加强基础学习，主动寻求帮助！", sizeof(stu->comment)-1);
-            break;
-        default:
-            strncpy(stu->comment, "成绩异常，无法生成评语，请检查成绩数据！", sizeof(stu->comment)-1);
-            break;
+    switch (stu->grade)
+    {
+    case 'A':
+        strncpy(stu->comment, "优秀！学习能力突出，知识掌握扎实，继续保持领先优势！", sizeof(stu->comment) - 1);
+        break;
+    case 'B':
+        strncpy(stu->comment, "良好！基础稳固，具备较强的应用能力，针对性提升可冲刺优秀！", sizeof(stu->comment) - 1);
+        break;
+    case 'C':
+        strncpy(stu->comment, "中等！掌握核心知识点，但存在薄弱环节，需加强练习巩固基础！", sizeof(stu->comment) - 1);
+        break;
+    case 'D':
+        strncpy(stu->comment, "及格！基本达到课程要求，需重点攻克薄弱科目，提升综合实力！", sizeof(stu->comment) - 1);
+        break;
+    case 'F':
+        strncpy(stu->comment, "不及格！基础薄弱，建议查漏补缺，主动寻求帮助！", sizeof(stu->comment) - 1);
+        break;
+    default:
+        strncpy(stu->comment, "成绩异常，无法生成评语，请检查成绩数据！", sizeof(stu->comment) - 1);
+        break;
     }
-    stu->comment[sizeof(stu->comment)-1] = '\0'; // 确保字符串结束符，防止溢出
+    stu->comment[sizeof(stu->comment) - 1] = '\0'; // 确保字符串结束符，防止溢出
 }
 
 void evaluateAll(StudentDB *db)
 {
-    if (db == NULL || db->count <= 0) {
+    if (db == NULL || db->count <= 0)
+    {
         printf("❌ 无学生数据，无法进行等级评定！\n");
         return;
     }
@@ -66,7 +80,8 @@ void evaluateAll(StudentDB *db)
 
 void gradeDistribution(const StudentDB *db)
 {
-    if (db == NULL || db->count <= 0) {
+    if (db == NULL || db->count <= 0)
+    {
         printf("❌ 无学生数据，无法统计等级分布！\n");
         return;
     }
@@ -76,14 +91,28 @@ void gradeDistribution(const StudentDB *db)
     int total = db->count;
 
     // 统计各等级人数
-    for (int i = 0; i < total; i++) {
-        switch (db->stu[i].grade) {
-            case 'A': countA++; break;
-            case 'B': countB++; break;
-            case 'C': countC++; break;
-            case 'D': countD++; break;
-            case 'F': countF++; break;
-            default: countErr++; break;
+    for (int i = 0; i < total; i++)
+    {
+        switch (db->stu[i].grade)
+        {
+        case 'A':
+            countA++;
+            break;
+        case 'B':
+            countB++;
+            break;
+        case 'C':
+            countC++;
+            break;
+        case 'D':
+            countD++;
+            break;
+        case 'F':
+            countF++;
+            break;
+        default:
+            countErr++;
+            break;
         }
     }
 
@@ -110,7 +139,8 @@ void gradeDistribution(const StudentDB *db)
     printf("C等    70-79      %-4d  %.1f%%\n", countC, rateC);
     printf("D等    60-69      %-4d  %.1f%%\n", countD, rateD);
     printf("F等    0-59       %-4d  %.1f%%\n", countF, rateF);
-    if (countErr > 0) {
+    if (countErr > 0)
+    {
         printf("异常   -          %-4d  %.1f%%\n", countErr, rateErr);
     }
     printf("-------------------------------------------\n");

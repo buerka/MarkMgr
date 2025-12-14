@@ -8,8 +8,10 @@ static int compareStudents(const void *a, const void *b)
     const Student *s2 = (const Student *)b;
 
     // 降序排列
-    if (s2->total > s1->total) return 1;
-    if (s2->total < s1->total) return -1;
+    if (s2->total > s1->total)
+        return 1;
+    if (s2->total < s1->total)
+        return -1;
     return 0;
 }
 
@@ -63,7 +65,7 @@ void courseAnalysis(const StudentDB *db)
     for (int i = 0; i < COURSE_COUNT; i++)
     {
         float sum = 0;
-        float maxScore = -1; // 初始设为极小值
+        float maxScore = -1;  // 初始设为极小值
         float minScore = 101; // 初始设为极大值 (成绩范围0-100)
         int passCount = 0;
 
@@ -71,12 +73,15 @@ void courseAnalysis(const StudentDB *db)
         for (int j = 0; j < db->count; j++)
         {
             float s = db->stu[j].score[i];
-            
+
             sum += s;
-            
-            if (s > maxScore) maxScore = s;
-            if (s < minScore) minScore = s;
-            if (s >= 60) passCount++;
+
+            if (s > maxScore)
+                maxScore = s;
+            if (s < minScore)
+                minScore = s;
+            if (s >= 60)
+                passCount++;
         }
 
         // 计算统计值
@@ -84,10 +89,10 @@ void courseAnalysis(const StudentDB *db)
         float passRate = (float)passCount / db->count * 100.0f;
 
         // 打印一行数据
-        printf("课程 %d   %-10.1f %-10.1f %-10.1f %-5.1f%%\n", 
+        printf("课程 %d   %-10.1f %-10.1f %-10.1f %-5.1f%%\n",
                i + 1, avg, maxScore, minScore, passRate);
     }
-    
+
     printf("----------------------------------------------------\n");
     printf("分析完成。\n");
 }

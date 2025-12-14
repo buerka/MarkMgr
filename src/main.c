@@ -25,7 +25,16 @@ void showMainMenu()
 void handleUserChoice(StudentDB *db)
 {
     int op;
-    scanf("%d", &op);
+
+    if (scanf("%d", &op) != 1)
+    {
+        printf("输入无效，请输入数字！\n");
+        flushInput();
+        pauseScreen();
+        return;
+    }
+
+    flushInput();
 
     switch (op)
     {
@@ -82,13 +91,14 @@ void handleUserChoice(StudentDB *db)
 
 int main()
 {
-    #ifdef _WIN32
-        system("chcp 65001 > nul"); 
-    #endif
+#ifdef _WIN32
+    system("chcp 65001 > nul");
+#endif
 
     StudentDB db = {.count = 0};
 
     loadData(&db);
+    calcAll(&db);
 
     while (1)
     {
