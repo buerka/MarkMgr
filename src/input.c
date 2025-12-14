@@ -52,44 +52,63 @@ void inputStudentInfo(StudentDB *db)
     }
 
     Student newStu = {0};
-    flushInput();
+    
+    // 1. 【修复】删除了这里的 flushInput(); 
+    // 因为 main.c 里已经清过一次了，这里再清就会卡住。
 
-    // 输入姓名
+    // 2. 输入姓名 (允许空格，防止缓冲区残留干扰)
     printf("请输入学生姓名: ");
-    fgets(newStu.name, sizeof(newStu.name), stdin);
-    // 移除换行符
-    newStu.name[strcspn(newStu.name, "\n")] = '\0';
+    if (fgets(newStu.name, sizeof(newStu.name), stdin) != NULL)
+    {
+        // 移除末尾的换行符
+        newStu.name[strcspn(newStu.name, "\n")] = '\0';
+    }
+    
+    // 如果用户手快直接回车，名字为空，强制给一个默认名或提示
+    if (strlen(newStu.name) == 0) {
+        printf("姓名不能为空！已自动命名为 'Unknown'\n");
+        strcpy(newStu.name, "Unknown");
+    }
 
-    // 输入ID（确保唯一）
+    // 3. 输入ID (【核心修复】改用 fgets + sscanf，防止狂按回车卡死)
+    char lineBuffer[50]; 
     while (1)
     {
         printf("请输入学生ID: ");
-        if (scanf("%d", &newStu.id) != 1)
+        // 先读取一整行
+        if (fgets(lineBuffer, sizeof(lineBuffer), stdin) == NULL) {
+            continue; // 防止异常
+        }
+
+        // 尝试从这行字里提取数字
+        if (sscanf(lineBuffer, "%d", &newStu.id) != 1)
         {
-            printf("ID必须是数字！\n");
-            flushInput();
+            // 如果提取失败（比如用户直接回车，或者输了 abc）
+            printf("输入无效！ID必须是数字，请重新输入。\n");
             continue;
         }
+
+        // 检查重复
         if (isIdExists(db, newStu.id))
         {
-            printf("该ID已存在！请重新输入: ");
+            printf("该ID已存在！请重新输入。\n");
             continue;
         }
         break;
     }
 
-    // 输入各科目成绩
+    // 4. 输入各科目成绩
     printf("请输入%d门课程的成绩（0-100）:\n", COURSE_COUNT);
     for (int i = 0; i < COURSE_COUNT; i++)
     {
         printf("课程%d: ", i + 1);
-        newStu.score[i] = inputScore();
+        newStu.score[i] = inputScore(); // inputScore 内部也要确保健壮，不过暂时保持不动
     }
 
     // 添加到数据库
     db->stu[db->count] = newStu;
     db->count++;
-    printf("学生信息添加成功！\n");
+    printf(">> 学生信息添加成功！\n");
     pauseScreen();
     clearScreen();
 }
