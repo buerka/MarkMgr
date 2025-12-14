@@ -10,4 +10,7 @@ int validateScore(float score);
 void updateStudent(StudentDB *db);
 void deleteStudent(StudentDB *db);
 
+void saveData(const StudentDB *db);
+void loadData(StudentDB *db);
+
 #endif

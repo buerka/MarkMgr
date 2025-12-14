@@ -33,18 +33,21 @@ void handleUserChoice(StudentDB *db)
         inputStudentInfo(db);
         calcAll(db);
         evaluateAll(db);
+        saveData(db);
         break;
 
     case 2:
         updateStudent(db);
         calcAll(db);
         evaluateAll(db);
+        saveData(db);
         break;
 
     case 3:
         deleteStudent(db);
         calcAll(db);
         evaluateAll(db);
+        saveData(db);
         break;
 
     case 4:
@@ -69,6 +72,7 @@ void handleUserChoice(StudentDB *db)
         break;
 
     case 0:
+        saveData(db);
         exit(0);
 
     default:
@@ -78,7 +82,13 @@ void handleUserChoice(StudentDB *db)
 
 int main()
 {
+    #ifdef _WIN32
+        system("chcp 65001 > nul"); 
+    #endif
+
     StudentDB db = {.count = 0};
+
+    loadData(&db);
 
     while (1)
     {

@@ -56,3 +56,5 @@ log/                   # 日志文件夹
 # /docs/_build/        # 文档构建产物
 # /test/coverage/      # 测试覆盖率报告
 # *.tmp                # 自定义临时文件
+pack_project.py
+project_full_context.txt
