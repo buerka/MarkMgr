@@ -8,6 +8,7 @@ float calcAverage(const Student *stu);
 
 void calcAll(StudentDB *db);
 void sortByTotal(StudentDB *db);
+void sortById(StudentDB *db);
 void courseAnalysis(const StudentDB *db);
 
 #endif

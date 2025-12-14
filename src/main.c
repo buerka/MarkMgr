@@ -64,6 +64,7 @@ void handleUserChoice(StudentDB *db)
         break;
 
     case 5:
+        sortById(db);
         displayAll(db);
         break;
 

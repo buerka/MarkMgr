@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "calc.h"
 
-static int compareStudents(const void *a, const void *b)
+static int compareStudentsByTotal(const void *a, const void *b)
 {
     const Student *s1 = (const Student *)a;
     const Student *s2 = (const Student *)b;
@@ -15,13 +15,28 @@ static int compareStudents(const void *a, const void *b)
     return 0;
 }
 
+static int compareStudentsById(const void *a, const void *b)
+{
+    const Student *s1 = (const Student *)a;
+    const Student *s2 = (const Student *)b;
+
+    // 升序：如果 s1 < s2，返回负数，s1 排前面
+    return s1->id - s2->id;
+}
+
+void sortById(StudentDB *db)
+{
+    if (db == NULL || db->count <= 1) return;
+    qsort(db->stu, db->count, sizeof(Student), compareStudentsById);
+}
+
 void sortByTotal(StudentDB *db)
 {
     if (db == NULL || db->count <= 1)
     {
         return;
     }
-    qsort(db->stu, db->count, sizeof(Student), compareStudents);
+    qsort(db->stu, db->count, sizeof(Student), compareStudentsByTotal);
 
     printf(">> 已按总分从高到低完成排序。\n");
 }

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "query.h"
 #include "utils.h"
 
@@ -58,34 +59,66 @@ void displayStudent(const Student *stu)
 
 void displayAll(const StudentDB *db)
 {
-    if (db->count == 0)
-    {
+    if (db->count == 0) {
         printf("数据库为空，暂无学生信息。\n");
         pauseScreen();
         clearScreen();
         return;
     }
 
-    // 1. 修改表头：前面增加 "排名"
-    printf("\n%-6s %-8s %-15s %-8s %-8s %-6s %s\n", "排名", "ID", "姓名", "总分", "平均分", "等级", "状态");
-    printf("-----------------------------------------------------------------------\n");
-    for (int i = 0; i < db->count; i++)
-    {
-        // 2. 打印时增加序号 (i + 1)
+    // ============================================================
+    // 1. 打印表头 (完全手动对齐)
+    // ============================================================
+    // 视觉宽度设计：
+    // 排名(6) | ID(10) | 姓名(14) | 总分(10) | 平均分(10) | 等级(8) | 状态
+    printf("\n");
+    printf("排名  ID        姓名          总分      平均分    等级    状态\n");
+    printf("----------------------------------------------------------------------\n");
+    
+    // ============================================================
+    // 2. 打印数据 (严格匹配上面的视觉宽度)
+    // ============================================================
+    for (int i = 0; i < db->count; i++) {
         const Student *stu = &db->stu[i];
-        printf("%-6d %-8d %-15s %-8.1f %-8.1f %-6c %s\n",
-               i + 1, // <--- 排名
-               stu->id,
-               stu->name,
-               stu->total,
-               stu->average,
-               stu->grade ? stu->grade : '-',
-               stu->comment[0] ? "已评" : "-");
+        
+        // [列1] 排名 (占6格)
+        printf("%-6d", i + 1);
+        
+        // [列2] ID (占10格)
+        printf("%-10d", stu->id);
+        
+        // [列3] 姓名 (占14格，手动处理中文)
+        printf("%s", stu->name);
+        // 计算需要补多少空格
+        int len = strlen(stu->name);
+        int padding = 0;
+        if (len == 6) padding = 10;      // 2个汉字(占4格) -> 补10空
+        else if (len == 9) padding = 8;  // 3个汉字(占6格) -> 补8空
+        else if (len == 12) padding = 6; // 4个汉字(占8格) -> 补6空
+        else padding = 14 - len;         // 英文名兜底
+        
+        if (padding < 0) padding = 0;
+        for(int k=0; k<padding; k++) printf(" ");
+
+        // [列4] 总分 (占10格)
+        printf("%-10.1f", stu->total);
+
+        // [列5] 平均分 (占10格)
+        printf("%-10.1f", stu->average);
+
+        // [列6] 等级 (占8格)
+        printf("%-8c", stu->grade ? stu->grade : '-');
+               
+        // [列7] 状态
+        if (stu->comment[0]) printf("已评");
+        else printf("-");
+        
+        printf("\n");
     }
-
-    printf("-----------------------------------------------------------------------\n");
+    
+    printf("----------------------------------------------------------------------\n");
     printf("共找到 %d 条记录。\n", db->count);
-
+    
     pauseScreen();
     clearScreen();
 }
