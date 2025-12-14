@@ -143,7 +143,7 @@ void deleteStudent(StudentDB *db)
 {
     if (db->count == 0)
     {
-        printf("暂无学生信息，无法删除！\n");
+        printf("数据库为空，没有学生可删除。\n");
         pauseScreen();
         clearScreen();
         return;
@@ -151,39 +151,67 @@ void deleteStudent(StudentDB *db)
 
     int id;
     printf("请输入要删除的学生ID: ");
-    scanf("%d", &id);
+    // 增加输入检查
+    if (scanf("%d", &id) != 1)
+    {
+        printf("输入无效！\n");
+        flushInput();
+        pauseScreen();
+        clearScreen();
+        return;
+    }
+    flushInput();
 
-    // 查找并删除学生
+    int foundIndex = -1;
+    // 1. 查找学生
     for (int i = 0; i < db->count; i++)
     {
         if (db->stu[i].id == id)
         {
-            // 确认删除
-            printf("确定要删除ID为%d的学生吗？(1-确认，0-取消): ", id);
-            int confirm;
-            scanf("%d", &confirm);
-            if (confirm != 1)
-            {
-                printf("已取消删除！\n");
-                pauseScreen();
-                clearScreen();
-                return;
-            }
-
-            // 移动数组元素覆盖被删除项
-            for (int j = i; j < db->count - 1; j++)
-            {
-                db->stu[j] = db->stu[j + 1];
-            }
-            db->count--;
-            printf("学生信息删除成功！\n");
-            pauseScreen();
-            clearScreen();
-            return;
+            foundIndex = i;
+            break;
         }
     }
 
-    printf("未找到ID为%d的学生！\n", id);
+    if (foundIndex == -1)
+    {
+        printf("未找到 ID 为 %d 的学生。\n", id);
+        pauseScreen();
+        clearScreen();
+        return;
+    }
+
+    // 2. 显示详情并请求确认
+    Student *target = &db->stu[foundIndex];
+    printf("\n即将删除学生: [ %s ] (ID: %d)\n", target->name, target->id);
+    printf("警告：此操作不可恢复！\n");
+    printf("确定要删除吗？(输入 y 确认，其他键取消): ");
+
+    char confirm;
+    scanf("%c", &confirm);
+    flushInput();
+
+    if (confirm != 'y' && confirm != 'Y')
+    {
+        printf(">> 已取消删除操作。\n");
+        pauseScreen();
+        clearScreen();
+        return;
+    }
+
+    // 3. 执行物理删除 (数组移位)
+    // 从 foundIndex 开始，后一个覆盖前一个
+    for (int i = foundIndex; i < db->count - 1; i++)
+    {
+        db->stu[i] = db->stu[i + 1];
+    }
+    
+    // 4. 更新计数并清空末尾多余数据
+    db->count--;
+    // 将原数组最后一个位置清零，防止残留数据
+    memset(&db->stu[db->count], 0, sizeof(Student));
+
+    printf(">> 删除成功！\n");
     pauseScreen();
     clearScreen();
 }
