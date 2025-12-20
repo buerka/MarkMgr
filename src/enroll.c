@@ -151,6 +151,16 @@ void registerScore(StudentDB *sDB, const CourseDB *cDB)
     scanf("%d", &cId);
     flushInput();
 
+    int cIdxInDB = findCourseIndex(cDB, cId);
+    if (cIdxInDB == -1)
+    {
+        printf("❌ 课程库中不存在ID为 %d 的课程。\n", cId);
+        return;
+    }
+    // 2. 打印课程名称，让操作更友好
+    printf(">> 当前正在给 [%s] 录入成绩\n", cDB->courses[cIdxInDB].name);
+    // === 修改点结束 ===
+
     // 在该学生的选课列表中查找课程
     Student *stu = &sDB->stu[sIdx];
     int foundIdx = -1;
@@ -165,7 +175,7 @@ void registerScore(StudentDB *sDB, const CourseDB *cDB)
 
     if (foundIdx == -1)
     {
-        printf("❌ 该学生未选修此课程，无法录入成绩。\n");
+        printf("❌ 该学生未选修此课程 (%s)，无法录入成绩。\n", cDB->courses[cIdxInDB].name);
         return;
     }
 
