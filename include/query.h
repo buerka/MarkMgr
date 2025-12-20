@@ -3,9 +3,7 @@
 
 #include "student.h"
 
-void queryById(const StudentDB *db);
-void displayStudent(const Student *stu);
-void displayAll(const StudentDB *db);
-void printTranscript(const Student *stu);
+void queryById(const StudentDB *sDB, const CourseDB *cDB);
+void displayAll(const StudentDB *sDB); // 简略列表不需要课程库
 
 #endif

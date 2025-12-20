@@ -3,12 +3,8 @@
 
 #include "student.h"
 
-float calcTotal(const Student *stu);
-float calcAverage(const Student *stu);
-
 void calcAll(StudentDB *db);
 void sortByTotal(StudentDB *db);
-void sortById(StudentDB *db);
-void courseAnalysis(const StudentDB *db);
+void courseAnalysis(const StudentDB *sDB, const CourseDB *cDB); 
 
 #endif

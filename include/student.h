@@ -41,8 +41,10 @@ typedef struct
     int selectedCount; // 当前已选课程数
 
     // 统计数据
-    float totalScore;  // 总分
-    float totalCredit; // 总修学分 (新增)
+    float totalScore;   // 总分
+    float average;      // 平均分 (新增)
+    char grade;         // 综合等级 (A/B/C...) (新增)
+    char comment[100];  // 评语 (新增)
 } Student;
 
 typedef struct

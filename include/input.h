@@ -3,14 +3,10 @@
 
 #include "student.h"
 
-void inputStudentInfo(StudentDB *db);
-float inputScore();
-int validateScore(float score);
+int findStudentIndex(const StudentDB *db, int id);
 
-void updateStudent(StudentDB *db);
-void deleteStudent(StudentDB *db);
-
-void saveData(const StudentDB *db);
-void loadData(StudentDB *db);
+void handleStudentInfoMenu(StudentDB *db);
+void saveData(const StudentDB *db, const CourseDB *cdb); // 也要保存课程
+void loadData(StudentDB *db, CourseDB *cdb);
 
 #endif
