@@ -70,15 +70,20 @@ static void inputStudentInfo(StudentDB *db)
     printf("✅ 学生注册成功！\n");
 }
 
-// 简单的学生列表显示 (用于调试)
+// 简单的学生列表显示
 static void listStudents(const StudentDB *db)
 {
-    printf("\n--- 学生列表 ---\n");
+    printf("\n=== 学生列表 (共%d人) ===\n", db->count);
+    printf("%-10s %-16s %-8s\n", "学号", "姓名", "已选课");
+    printf("----------------------------------------\n");
     for (int i = 0; i < db->count; i++)
     {
-        printf("ID:%-8d 姓名:%-10s 已选课:%d门\n",
-               db->stu[i].id, db->stu[i].name, db->stu[i].selectedCount);
+        printf("%-10d %-16s %-8d\n",
+               db->stu[i].id,
+               db->stu[i].name,
+               db->stu[i].selectedCount);
     }
+    printf("----------------------------------------\n");
 }
 
 void handleStudentInfoMenu(StudentDB *db)
@@ -99,7 +104,6 @@ void handleStudentInfoMenu(StudentDB *db)
     }
 }
 
-// === 数据保存功能 ===
 void saveData(const StudentDB *db, const CourseDB *cdb)
 {
     // 1. 保存课程数据
@@ -138,7 +142,6 @@ void saveData(const StudentDB *db, const CourseDB *cdb)
     }
 }
 
-// === 数据加载功能 ===
 void loadData(StudentDB *db, CourseDB *cdb)
 {
     // 1. 加载课程数据

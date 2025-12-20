@@ -103,12 +103,16 @@ static void deleteCourse(CourseDB *db)
 static void listCourses(const CourseDB *db)
 {
     printf("\n=== 课程列表 (共%d门) ===\n", db->count);
-    printf("编号   名称             学分\n");
-    printf("----------------------------\n");
+    printf("%-8s %-20s %-8s\n", "编号", "课程名称", "学分");
+    printf("----------------------------------------\n");
     for (int i = 0; i < db->count; i++)
     {
-        printf("%-6d %-16s %.1f\n", db->courses[i].id, db->courses[i].name, db->courses[i].credit);
+        printf("%-8d %-20s %-8.1f\n",
+               db->courses[i].id,
+               db->courses[i].name,
+               db->courses[i].credit);
     }
+    printf("----------------------------------------\n");
 }
 
 void handleCourseMenu(CourseDB *db)
@@ -137,7 +141,6 @@ void handleCourseMenu(CourseDB *db)
             break;
         case 4:
             listCourses(db);
-            pauseScreen();
             break;
         default:
             printf("无效输入\n");

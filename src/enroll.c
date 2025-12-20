@@ -106,7 +106,6 @@ void handleEnrollMenu(StudentDB *stuDB, const CourseDB *courseDB)
     while (1)
     {
         printf("\n--- 学生选课管理 ---\n");
-        // 新增选项 3
         printf("1. 学生选课\n2. 学生退课\n3. 录入成绩\n0. 返回上一级\n");
         printf("请选择: ");
         int op;
@@ -125,7 +124,7 @@ void handleEnrollMenu(StudentDB *stuDB, const CourseDB *courseDB)
             break;
         case 3:
             registerScore(stuDB, courseDB);
-            break; // 调用新函数
+            break;
         default:
             printf("无效输入\n");
         }
@@ -157,11 +156,8 @@ void registerScore(StudentDB *sDB, const CourseDB *cDB)
         printf("❌ 课程库中不存在ID为 %d 的课程。\n", cId);
         return;
     }
-    // 2. 打印课程名称，让操作更友好
     printf(">> 当前正在给 [%s] 录入成绩\n", cDB->courses[cIdxInDB].name);
-    // === 修改点结束 ===
 
-    // 在该学生的选课列表中查找课程
     Student *stu = &sDB->stu[sIdx];
     int foundIdx = -1;
     for (int i = 0; i < stu->selectedCount; i++)

@@ -6,7 +6,6 @@
 #include "course.h"
 #include "enroll.h"
 #include "utils.h"
-// === 新增：引入计算、查询、评级模块的头文件 ===
 #include "calc.h"
 #include "grade.h"
 #include "query.h"
@@ -15,7 +14,6 @@
 StudentDB globalStuDB = {0};
 CourseDB globalCourseDB = {0};
 
-// 登录系统 (保持不变)
 int loginSystem()
 {
     int choice;
@@ -48,7 +46,6 @@ int loginSystem()
         else
         {
             printf("❌ 密码错误！\n");
-            pauseScreen();
             return 0;
         }
     }
@@ -59,7 +56,7 @@ int loginSystem()
     return 0;
 }
 
-// 主菜单 (扩展回8个功能)
+// 主菜单
 void showMainMenu()
 {
     printf("\n===== 教务系统主菜单 =====\n");
@@ -91,7 +88,7 @@ int main()
     system("chcp 65001 > nul");
 #endif
 
-    // 加载数据 (预留接口)
+    // 加载数据
     loadData(&globalStuDB, &globalCourseDB);
 
     while (1)
@@ -99,7 +96,6 @@ int main()
         // 1. 登录循环
         if (!loginSystem())
         {
-            clearScreen();
             continue;
         }
 
@@ -127,45 +123,37 @@ int main()
             case 3:
                 handleEnrollMenu(&globalStuDB, &globalCourseDB);
                 break;
-
-            // === 以下是集成的新功能 ===
             case 4:            // 查询个人成绩单
                 refreshData(); // 先计算，防止新录的成绩没算进总分
                 queryById(&globalStuDB, &globalCourseDB);
                 break;
-
-            case 5: // 显示所有
+            case 5:
                 refreshData();
                 displayAll(&globalStuDB);
                 break;
-
-            case 6: // 排名
+            case 6:
                 refreshData();
                 sortByTotal(&globalStuDB); // 排序
                 displayAll(&globalStuDB);  // 显示
                 break;
 
-            case 7: // 学科分析 (需要传入两个DB)
+            case 7: // 学科分析
                 courseAnalysis(&globalStuDB, &globalCourseDB);
-                pauseScreen(); // 因为 courseAnalysis 内部可能没暂停，这里补一个
                 break;
 
             case 8: // 等级分布
                 refreshData();
                 gradeDistribution(&globalStuDB);
-                pauseScreen();
                 break;
 
             case 0:
                 logout = 1;
                 printf(">> 已退出登录。\n");
-                // 退出登录时可以顺手保存一下数据
                 saveData(&globalStuDB, &globalCourseDB);
                 break;
 
             default:
                 printf("无效选项！\n");
-                pauseScreen();
             }
         }
     }

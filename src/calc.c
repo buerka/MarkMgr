@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "calc.h"
-#include "course.h" // 假设里面有 findCourseIndex 等辅助函数
+#include "course.h"
 
 // 内部函数：计算单个学生
 static void calcStudent(Student *stu)
@@ -53,7 +53,7 @@ void sortByTotal(StudentDB *db)
     }
 }
 
-// 学科分析：这是最复杂的，需要双重循环
+// 学科分析：最复杂，需要双重循环
 void courseAnalysis(const StudentDB *sDB, const CourseDB *cDB)
 {
     if (cDB->count == 0)
@@ -63,9 +63,10 @@ void courseAnalysis(const StudentDB *sDB, const CourseDB *cDB)
     }
 
     printf("\n========= 学科分析报告 =========\n");
-    printf("%-6s %-15s %-6s %-8s %-8s %-8s\n",
+    // 统一表头格式：ID(8) 名称(20) 人数(8) 平均(8) 最高(8) 及格率(8)
+    printf("%-8s %-20s %-8s %-8s %-8s %-8s\n",
            "ID", "课程名称", "选课人数", "平均分", "最高分", "及格率");
-    printf("------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------------\n");
 
     // 1. 遍历每一门在这个系统里存在的课程
     for (int i = 0; i < cDB->count; i++)
@@ -104,7 +105,8 @@ void courseAnalysis(const StudentDB *sDB, const CourseDB *cDB)
 
         if (count > 0)
         {
-            printf("%-6d %-15s %-6d %-8.1f %-8.1f %-5.1f%%\n",
+            // 有成绩数据：显示统计结果
+            printf("%-8d %-20s %-8d %-8.1f %-8.1f %-5.1f%%\n",
                    cId,
                    cDB->courses[i].name,
                    count,
@@ -114,10 +116,10 @@ void courseAnalysis(const StudentDB *sDB, const CourseDB *cDB)
         }
         else
         {
-            // 无人选修或无人考试
-            printf("%-6d %-15s %-6d %-8s %-8s %-8s\n",
+            // 无人选修或无人考试：显示占位符
+            printf("%-8d %-20s %-8d %-8s %-8s %-8s\n",
                    cId, cDB->courses[i].name, 0, "-", "-", "-");
         }
     }
-    printf("------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------------\n");
 }
