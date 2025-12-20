@@ -107,7 +107,7 @@ void handleEnrollMenu(StudentDB *stuDB, const CourseDB *courseDB)
     {
         printf("\n--- 学生选课管理 ---\n");
         // 新增选项 3
-        printf("1. 学生选课\n2. 学生退课\n3. 录入成绩(补丁)\n0. 返回上一级\n");
+        printf("1. 学生选课\n2. 学生退课\n3. 录入成绩\n0. 返回上一级\n");
         printf("请选择: ");
         int op;
         scanf("%d", &op);
