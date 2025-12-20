@@ -16,7 +16,8 @@ StudentDB globalStuDB = {0};
 CourseDB globalCourseDB = {0};
 
 // 登录系统 (保持不变)
-int loginSystem() {
+int loginSystem()
+{
     int choice;
     printf("\n==================================\n");
     printf("   综合教务管理系统 - 登录\n");
@@ -24,35 +25,43 @@ int loginSystem() {
     printf("1. 管理员登录 (默认密码 admin)\n");
     printf("2. 退出系统\n");
     printf("请选择: ");
-    
-    if (scanf("%d", &choice) != 1) {
+
+    if (scanf("%d", &choice) != 1)
+    {
         flushInput();
         return 0;
     }
     flushInput();
 
-    if (choice == 1) {
+    if (choice == 1)
+    {
         char pwd[20];
         printf("请输入管理员密码: ");
         fgets(pwd, 20, stdin);
         pwd[strcspn(pwd, "\n")] = 0;
 
-        if (strcmp(pwd, "admin") == 0) {
+        if (strcmp(pwd, "admin") == 0)
+        {
             printf("登录成功！\n");
             return 1; // 登录成功
-        } else {
+        }
+        else
+        {
             printf("❌ 密码错误！\n");
             pauseScreen();
             return 0;
         }
-    } else if (choice == 2) {
+    }
+    else if (choice == 2)
+    {
         exit(0);
     }
     return 0;
 }
 
 // 主菜单 (扩展回8个功能)
-void showMainMenu() {
+void showMainMenu()
+{
     printf("\n===== 教务系统主菜单 =====\n");
     printf("1. 学生信息管理 (录入/查询)\n");
     printf("2. 课程信息维护 (增删改)\n");
@@ -70,12 +79,14 @@ void showMainMenu() {
 
 // 辅助函数：统一刷新数据
 // 在显示之前，先重新计算总分、平均分和评级，确保数据最新
-void refreshData() {
+void refreshData()
+{
     calcAll(&globalStuDB);
     evaluateAll(&globalStuDB);
 }
 
-int main() {
+int main()
+{
 #ifdef _WIN32
     system("chcp 65001 > nul");
 #endif
@@ -83,25 +94,30 @@ int main() {
     // 加载数据 (预留接口)
     loadData(&globalStuDB, &globalCourseDB);
 
-    while (1) {
+    while (1)
+    {
         // 1. 登录循环
-        if (!loginSystem()) {
+        if (!loginSystem())
+        {
             clearScreen();
-            continue; 
+            continue;
         }
 
         // 2. 业务菜单循环
         int logout = 0;
-        while (!logout) {
+        while (!logout)
+        {
             showMainMenu();
             int op;
-            if (scanf("%d", &op) != 1) {
+            if (scanf("%d", &op) != 1)
+            {
                 flushInput();
                 continue;
             }
             flushInput();
 
-            switch (op) {
+            switch (op)
+            {
             case 1:
                 handleStudentInfoMenu(&globalStuDB);
                 break;
@@ -111,9 +127,9 @@ int main() {
             case 3:
                 handleEnrollMenu(&globalStuDB, &globalCourseDB);
                 break;
-                
+
             // === 以下是集成的新功能 ===
-            case 4: // 查询个人成绩单
+            case 4:            // 查询个人成绩单
                 refreshData(); // 先计算，防止新录的成绩没算进总分
                 queryById(&globalStuDB, &globalCourseDB);
                 break;
@@ -139,7 +155,7 @@ int main() {
                 gradeDistribution(&globalStuDB);
                 pauseScreen();
                 break;
-            
+
             case 0:
                 logout = 1;
                 printf(">> 已退出登录。\n");

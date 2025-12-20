@@ -4,33 +4,45 @@
 #include "input.h"  // 需要用到 findStudentIndex (在 input.h 中声明)
 #include "utils.h"
 
-static void enrollStudent(StudentDB *sDB, const CourseDB *cDB) {
+static void enrollStudent(StudentDB *sDB, const CourseDB *cDB)
+{
     int sId, cId;
-    
+
     printf("请输入学生学号: ");
     scanf("%d", &sId);
     int sIdx = findStudentIndex(sDB, sId); // 需在 input.c 实现并暴露
-    if (sIdx == -1) { printf("❌ 学生不存在。\n"); return; }
+    if (sIdx == -1)
+    {
+        printf("❌ 学生不存在。\n");
+        return;
+    }
 
     printf("请输入课程编号: ");
     scanf("%d", &cId);
     flushInput();
-    
+
     // 1. 检查课程是否存在
     int cIdx = findCourseIndex(cDB, cId);
-    if (cIdx == -1) { printf("❌ 课程不存在。\n"); return; }
+    if (cIdx == -1)
+    {
+        printf("❌ 课程不存在。\n");
+        return;
+    }
 
     Student *stu = &sDB->stu[sIdx];
 
     // 2. 检查选课上限
-    if (stu->selectedCount >= MAX_STUDENT_COURSES) {
+    if (stu->selectedCount >= MAX_STUDENT_COURSES)
+    {
         printf("❌ 该学生选课数已达上限 (%d门)！\n", MAX_STUDENT_COURSES);
         return;
     }
 
     // 3. 检查是否重复
-    for (int i = 0; i < stu->selectedCount; i++) {
-        if (stu->selectedCourses[i].courseId == cId) {
+    for (int i = 0; i < stu->selectedCount; i++)
+    {
+        if (stu->selectedCourses[i].courseId == cId)
+        {
             printf("❌ 学生已选过该课程，无需重复。\n");
             return;
         }
@@ -45,12 +57,17 @@ static void enrollStudent(StudentDB *sDB, const CourseDB *cDB) {
     printf("✅ 选课成功！%s 目前已选 %d 门课。\n", stu->name, stu->selectedCount);
 }
 
-static void dropStudent(StudentDB *sDB) {
+static void dropStudent(StudentDB *sDB)
+{
     int sId, cId;
     printf("请输入学生学号: ");
     scanf("%d", &sId);
     int sIdx = findStudentIndex(sDB, sId);
-    if (sIdx == -1) { printf("❌ 学生不存在。\n"); return; }
+    if (sIdx == -1)
+    {
+        printf("❌ 学生不存在。\n");
+        return;
+    }
 
     printf("请输入要退掉的课程编号: ");
     scanf("%d", &cId);
@@ -60,28 +77,34 @@ static void dropStudent(StudentDB *sDB) {
     int foundInList = -1;
 
     // 查找已选列表
-    for (int i = 0; i < stu->selectedCount; i++) {
-        if (stu->selectedCourses[i].courseId == cId) {
+    for (int i = 0; i < stu->selectedCount; i++)
+    {
+        if (stu->selectedCourses[i].courseId == cId)
+        {
             foundInList = i;
             break;
         }
     }
 
-    if (foundInList == -1) {
+    if (foundInList == -1)
+    {
         printf("❌ 该学生未选修此课程，无法退课。\n");
         return;
     }
 
     // 移位删除
-    for (int i = foundInList; i < stu->selectedCount - 1; i++) {
-        stu->selectedCourses[i] = stu->selectedCourses[i+1];
+    for (int i = foundInList; i < stu->selectedCount - 1; i++)
+    {
+        stu->selectedCourses[i] = stu->selectedCourses[i + 1];
     }
     stu->selectedCount--;
     printf("✅ 退课成功。\n");
 }
 
-void handleEnrollMenu(StudentDB *stuDB, const CourseDB *courseDB) {
-    while(1) {
+void handleEnrollMenu(StudentDB *stuDB, const CourseDB *courseDB)
+{
+    while (1)
+    {
         printf("\n--- 学生选课管理 ---\n");
         printf("1. 学生选课\n2. 学生退课\n0. 返回上一级\n");
         printf("请选择: ");
@@ -89,11 +112,18 @@ void handleEnrollMenu(StudentDB *stuDB, const CourseDB *courseDB) {
         scanf("%d", &op);
         flushInput();
 
-        if (op == 0) break;
-        switch(op) {
-            case 1: enrollStudent(stuDB, courseDB); break;
-            case 2: dropStudent(stuDB); break;
-            default: printf("无效输入\n");
+        if (op == 0)
+            break;
+        switch (op)
+        {
+        case 1:
+            enrollStudent(stuDB, courseDB);
+            break;
+        case 2:
+            dropStudent(stuDB);
+            break;
+        default:
+            printf("无效输入\n");
         }
     }
 }
