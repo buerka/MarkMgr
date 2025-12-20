@@ -106,7 +106,8 @@ void handleEnrollMenu(StudentDB *stuDB, const CourseDB *courseDB)
     while (1)
     {
         printf("\n--- 学生选课管理 ---\n");
-        printf("1. 学生选课\n2. 学生退课\n0. 返回上一级\n");
+        // 新增选项 3
+        printf("1. 学生选课\n2. 学生退课\n3. 录入成绩(补丁)\n0. 返回上一级\n");
         printf("请选择: ");
         int op;
         scanf("%d", &op);
@@ -122,8 +123,62 @@ void handleEnrollMenu(StudentDB *stuDB, const CourseDB *courseDB)
         case 2:
             dropStudent(stuDB);
             break;
+        case 3:
+            registerScore(stuDB, courseDB);
+            break; // 调用新函数
         default:
             printf("无效输入\n");
         }
     }
+}
+
+void registerScore(StudentDB *sDB, const CourseDB *cDB)
+{
+    int sId, cId;
+    float score;
+
+    printf(">> 成绩录入模式 <<\n");
+    printf("请输入学生学号: ");
+    scanf("%d", &sId);
+    int sIdx = findStudentIndex(sDB, sId);
+    if (sIdx == -1)
+    {
+        printf("❌ 学生不存在。\n");
+        return;
+    }
+
+    printf("请输入课程编号: ");
+    scanf("%d", &cId);
+    flushInput();
+
+    // 在该学生的选课列表中查找课程
+    Student *stu = &sDB->stu[sIdx];
+    int foundIdx = -1;
+    for (int i = 0; i < stu->selectedCount; i++)
+    {
+        if (stu->selectedCourses[i].courseId == cId)
+        {
+            foundIdx = i;
+            break;
+        }
+    }
+
+    if (foundIdx == -1)
+    {
+        printf("❌ 该学生未选修此课程，无法录入成绩。\n");
+        return;
+    }
+
+    printf("请输入成绩 (0-100): ");
+    scanf("%f", &score);
+    flushInput();
+
+    if (score < 0 || score > 100)
+    {
+        printf("❌ 成绩不合法。\n");
+        return;
+    }
+
+    stu->selectedCourses[foundIdx].score = score;
+    printf("✅ 成绩录入成功！\n");
 }
