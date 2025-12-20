@@ -136,22 +136,18 @@ int main()
                 sortByTotal(&globalStuDB); // 排序
                 displayAll(&globalStuDB);  // 显示
                 break;
-
             case 7: // 学科分析
                 courseAnalysis(&globalStuDB, &globalCourseDB);
                 break;
-
             case 8: // 等级分布
                 refreshData();
                 gradeDistribution(&globalStuDB);
                 break;
-
             case 0:
                 logout = 1;
                 printf(">> 已退出登录。\n");
                 saveData(&globalStuDB, &globalCourseDB);
                 break;
-
             default:
                 printf("无效选项！\n");
             }

@@ -12,6 +12,7 @@
 /src/*.out
 /src/a.out
 # 根目录可能生成的可执行文件（Windows/Linux/macOS）
+*.dat
 *.exe
 *.exe.stackdump
 *.out
